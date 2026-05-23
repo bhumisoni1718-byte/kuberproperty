@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,6 +13,25 @@ export default function AdminTeamPage() {
   const [editing, setEditing] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({ name: "", role: "", bio: "", order: 0 });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchTeam();
+  }, []);
+
+  async function fetchTeam() {
+    try {
+      const res = await fetch("/api/admin/team");
+      if (res.ok) {
+        const data = await res.json();
+        setTeam(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch team:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -24,11 +43,13 @@ export default function AdminTeamPage() {
     setEditing(null);
     setShowForm(false);
     setFormData({ name: "", role: "", bio: "", order: 0 });
+    fetchTeam();
   }
 
   async function handleDelete(id: string) {
     if (confirm("Are you sure?")) {
       await deleteTeamMember(id);
+      fetchTeam();
     }
   }
 
@@ -109,26 +130,30 @@ export default function AdminTeamPage() {
       )}
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
-        {team.map((m) => (
-          <div key={m.id} className="rounded-xl border bg-white p-4">
-            <div className="flex justify-between items-start">
-              <div className="flex-1">
-                <p className="font-semibold text-navy">{m.name}</p>
-                <p className="text-sm text-gold">{m.role}</p>
-                <p className="text-sm text-navy/70 mt-2">{m.bio}</p>
-              </div>
-              <div className="flex gap-2 ml-4">
-                <Button size="sm" variant="outline" onClick={() => handleEdit(m)}>
-                  <Pencil className="h-4 w-4" />
-                </Button>
-                <Button size="sm" variant="outline" onClick={() => handleDelete(m.id)}>
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+        {loading ? (
+          <p className="text-center text-navy/50 py-8 col-span-2">Loading...</p>
+        ) : (
+          team.map((m) => (
+            <div key={m.id} className="rounded-xl border bg-white p-4">
+              <div className="flex justify-between items-start">
+                <div className="flex-1">
+                  <p className="font-semibold text-navy">{m.name}</p>
+                  <p className="text-sm text-gold">{m.role}</p>
+                  <p className="text-sm text-navy/70 mt-2">{m.bio}</p>
+                </div>
+                <div className="flex gap-2 ml-4">
+                  <Button size="sm" variant="outline" onClick={() => handleEdit(m)}>
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => handleDelete(m.id)}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-        {team.length === 0 && <p className="text-center text-navy/50 py-8 col-span-2">No team members yet. Add your first team member.</p>}
+          ))
+        )}
+        {!loading && team.length === 0 && <p className="text-center text-navy/50 py-8 col-span-2">No team members yet. Add your first team member.</p>}
       </div>
     </div>
   );

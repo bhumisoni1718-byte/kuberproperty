@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,9 +13,25 @@ export default function AdminFAQsPage() {
   const [editing, setEditing] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({ question: "", answer: "", category: "General", order: 0 });
+  const [loading, setLoading] = useState(true);
 
-  // This would be fetched from server in real implementation
-  // For now, showing the UI structure
+  useEffect(() => {
+    fetchFAQs();
+  }, []);
+
+  async function fetchFAQs() {
+    try {
+      const res = await fetch("/api/admin/faqs");
+      if (res.ok) {
+        const data = await res.json();
+        setFaqs(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch FAQs:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -27,13 +43,13 @@ export default function AdminFAQsPage() {
     setEditing(null);
     setShowForm(false);
     setFormData({ question: "", answer: "", category: "General", order: 0 });
-    // In real implementation, refetch data
+    fetchFAQs();
   }
 
   async function handleDelete(id: string) {
     if (confirm("Are you sure?")) {
       await deleteFAQ(id);
-      // In real implementation, refetch data
+      fetchFAQs();
     }
   }
 
@@ -115,24 +131,28 @@ export default function AdminFAQsPage() {
       )}
 
       <div className="mt-6 space-y-4">
-        {faqs.map((f) => (
-          <div key={f.id} className="rounded-xl border bg-white p-4 flex justify-between items-start">
-            <div className="flex-1">
-              <p className="font-medium text-navy">{f.question}</p>
-              <p className="text-sm text-navy/70 mt-2">{f.answer}</p>
-              <p className="text-xs text-navy/50 mt-1">Category: {f.category}</p>
+        {loading ? (
+          <p className="text-center text-navy/50 py-8">Loading...</p>
+        ) : (
+          faqs.map((f) => (
+            <div key={f.id} className="rounded-xl border bg-white p-4 flex justify-between items-start">
+              <div className="flex-1">
+                <p className="font-medium text-navy">{f.question}</p>
+                <p className="text-sm text-navy/70 mt-2">{f.answer}</p>
+                <p className="text-xs text-navy/50 mt-1">Category: {f.category}</p>
+              </div>
+              <div className="flex gap-2 ml-4">
+                <Button size="sm" variant="outline" onClick={() => handleEdit(f)}>
+                  <Pencil className="h-4 w-4" />
+                </Button>
+                <Button size="sm" variant="outline" onClick={() => handleDelete(f.id)}>
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
-            <div className="flex gap-2 ml-4">
-              <Button size="sm" variant="outline" onClick={() => handleEdit(f)}>
-                <Pencil className="h-4 w-4" />
-              </Button>
-              <Button size="sm" variant="outline" onClick={() => handleDelete(f.id)}>
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        ))}
-        {faqs.length === 0 && <p className="text-center text-navy/50 py-8">No FAQs yet. Add your first FAQ.</p>}
+          ))
+        )}
+        {!loading && faqs.length === 0 && <p className="text-center text-navy/50 py-8">No FAQs yet. Add your first FAQ.</p>}
       </div>
     </div>
   );

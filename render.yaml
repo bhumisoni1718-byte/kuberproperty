@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: kuberproperty
+    env: node
+    buildCommand: npm run build
+    startCommand: npm start
+    envVars:
+      - key: NEXT_PUBLIC_APP_URL
+        value: https://www.kuberproperty.in
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: AUTH_SECRET
+        sync: false
+      - key: AUTH_URL
+        value: https://www.kuberproperty.in
+      - key: RESEND_API_KEY
+        sync: false
+      - key: RESEND_FROM_EMAIL
+        value: "Kuber Property <support@kuberproperty.in>"
+      - key: RESEND_FALLBACK_FROM
+        value: "Kuber Property <onboarding@resend.dev>"
+      - key: REPLY_TO_EMAIL
+        value: support@kuberproperty.in
+      - key: LEAD_NOTIFICATION_EMAIL
+        value: nimesh8524@gmail.com
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false

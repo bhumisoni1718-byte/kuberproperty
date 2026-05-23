@@ -262,3 +262,33 @@ export async function deleteTestimonial(id: string) {
   revalidatePath("/");
   return { success: true };
 }
+
+export async function createArea(data: unknown) {
+  const session = await requireAuth(["ADMIN"]);
+  const parsed = data as { name: string; slug: string; description: string; featured: boolean; order: number };
+  await prisma.area.create({
+    data: parsed,
+  });
+  revalidatePath("/areas");
+  revalidatePath("/");
+  return { success: true };
+}
+
+export async function updateArea(id: string, data: unknown) {
+  const session = await requireAuth(["ADMIN"]);
+  const parsed = data as { name: string; slug: string; description: string; featured: boolean; order: number };
+  await prisma.area.update({
+    where: { id },
+    data: parsed,
+  });
+  revalidatePath("/areas");
+  revalidatePath(`/areas/${parsed.slug}`);
+  return { success: true };
+}
+
+export async function deleteArea(id: string) {
+  const session = await requireAuth(["ADMIN"]);
+  await prisma.area.delete({ where: { id } });
+  revalidatePath("/areas");
+  return { success: true };
+}

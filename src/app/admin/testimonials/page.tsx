@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,6 +13,25 @@ export default function AdminTestimonialsPage() {
   const [editing, setEditing] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({ name: "", role: "", content: "", rating: 5, featured: false, order: 0 });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchTestimonials();
+  }, []);
+
+  async function fetchTestimonials() {
+    try {
+      const res = await fetch("/api/admin/testimonials");
+      if (res.ok) {
+        const data = await res.json();
+        setTestimonials(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch testimonials:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -24,11 +43,13 @@ export default function AdminTestimonialsPage() {
     setEditing(null);
     setShowForm(false);
     setFormData({ name: "", role: "", content: "", rating: 5, featured: false, order: 0 });
+    fetchTestimonials();
   }
 
   async function handleDelete(id: string) {
     if (confirm("Are you sure?")) {
       await deleteTestimonial(id);
+      fetchTestimonials();
     }
   }
 
@@ -135,29 +156,33 @@ export default function AdminTestimonialsPage() {
       )}
 
       <div className="mt-6 space-y-4">
-        {testimonials.map((t) => (
-          <div key={t.id} className="rounded-xl border bg-white p-4">
-            <div className="flex justify-between items-start">
-              <div className="flex-1">
-                <p className="font-medium text-navy">{t.name} — {t.role}</p>
-                <p className="text-sm text-navy/70 mt-1">&ldquo;{t.content}&rdquo;</p>
-                <div className="flex gap-4 mt-2 text-xs text-navy/50">
-                  <span>Rating: {t.rating}/5</span>
-                  <span>Featured: {t.featured ? "Yes" : "No"}</span>
+        {loading ? (
+          <p className="text-center text-navy/50 py-8">Loading...</p>
+        ) : (
+          testimonials.map((t) => (
+            <div key={t.id} className="rounded-xl border bg-white p-4">
+              <div className="flex justify-between items-start">
+                <div className="flex-1">
+                  <p className="font-medium text-navy">{t.name} — {t.role}</p>
+                  <p className="text-sm text-navy/70 mt-1">&ldquo;{t.content}&rdquo;</p>
+                  <div className="flex gap-4 mt-2 text-xs text-navy/50">
+                    <span>Rating: {t.rating}/5</span>
+                    <span>Featured: {t.featured ? "Yes" : "No"}</span>
+                  </div>
+                </div>
+                <div className="flex gap-2 ml-4">
+                  <Button size="sm" variant="outline" onClick={() => handleEdit(t)}>
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => handleDelete(t.id)}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </div>
               </div>
-              <div className="flex gap-2 ml-4">
-                <Button size="sm" variant="outline" onClick={() => handleEdit(t)}>
-                  <Pencil className="h-4 w-4" />
-                </Button>
-                <Button size="sm" variant="outline" onClick={() => handleDelete(t.id)}>
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
             </div>
-          </div>
-        ))}
-        {testimonials.length === 0 && <p className="text-center text-navy/50 py-8">No testimonials yet. Add your first testimonial.</p>}
+          ))
+        )}
+        {!loading && testimonials.length === 0 && <p className="text-center text-navy/50 py-8">No testimonials yet. Add your first testimonial.</p>}
       </div>
     </div>
   );
