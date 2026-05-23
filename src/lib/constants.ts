@@ -8,8 +8,8 @@ export const LEAD_NOTIFICATION_EMAIL =
   process.env.LEAD_NOTIFICATION_EMAIL || "nimesh8524@gmail.com";
 
 export const CONTACT = {
-  phone: "+91 991603144",
-  whatsapp: "91991603144",
+  phone: "+91 9913603144",
+  whatsapp: "919913603144",
   email: SUPPORT_EMAIL,
   address: "VINAYAK HEIGHTS, A-704, Uma Nagar, Kendranagar, Vadodara, Gujarat 390025",
 };

@@ -12,7 +12,7 @@ import {
 } from "@react-email/components";
 
 const SUPPORT = "support@kuberproperty.in";
-const PHONE = "+91 991603144";
+const PHONE = "+91 9913603144";
 const WEBSITE = process.env.NEXT_PUBLIC_APP_URL || "https://www.kuberproperty.in";
 
 export function AutoReplyEmail({ name }: { name: string }) {
