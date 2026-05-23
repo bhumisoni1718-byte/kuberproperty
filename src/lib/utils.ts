@@ -18,6 +18,6 @@ export function formatArea(sqft: number) {
 }
 
 export function absoluteUrl(path = "") {
-  const base = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const base = process.env.NEXT_PUBLIC_APP_URL || "https://www.kuberproperty.in";
   return `${base}${path.startsWith("/") ? path : `/${path}`}`;
 }

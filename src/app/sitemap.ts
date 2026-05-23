@@ -7,7 +7,7 @@ import { PROPERTY_TYPES, BLOG_CATEGORIES } from "@/lib/constants";
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const base = process.env.NEXT_PUBLIC_APP_URL || "https://www.kuberproperty.in";
 
   const staticRoutes: MetadataRoute.Sitemap = [
     "",
