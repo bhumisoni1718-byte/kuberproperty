@@ -5,6 +5,7 @@ import { auth, canEdit, canManageProperties } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { propertySchema, blogSchema } from "@/lib/validations";
 import bcrypt from "bcryptjs";
+import slugify from "slugify";
 
 async function requireAuth(roles?: ("ADMIN" | "EDITOR" | "AGENT")[]) {
   const session = await auth();
@@ -20,9 +21,13 @@ export async function createProperty(data: unknown) {
   const parsed = propertySchema.safeParse(data);
   if (!parsed.success) return { error: parsed.error.flatten() };
 
+  // Auto-generate slug from title if not provided
+  const slug = parsed.data.slug || slugify(parsed.data.title, { lower: true, strict: true });
+
   const property = await prisma.property.create({
     data: {
       ...parsed.data,
+      slug,
       virtualTourUrl: parsed.data.virtualTourUrl || null,
       createdById: session.user.id,
       publishedAt: parsed.data.status === "PUBLISHED" ? new Date() : null,
@@ -41,10 +46,14 @@ export async function updateProperty(id: string, data: unknown) {
   const parsed = propertySchema.safeParse(data);
   if (!parsed.success) return { error: parsed.error.flatten() };
 
+  // Auto-generate slug from title if not provided
+  const slug = parsed.data.slug || slugify(parsed.data.title, { lower: true, strict: true });
+
   await prisma.property.update({
     where: { id },
     data: {
       ...parsed.data,
+      slug,
       virtualTourUrl: parsed.data.virtualTourUrl || null,
       publishedAt:
         parsed.data.status === "PUBLISHED" ? new Date() : undefined,
@@ -52,7 +61,7 @@ export async function updateProperty(id: string, data: unknown) {
   });
 
   revalidatePath("/properties");
-  revalidatePath(`/properties/${parsed.data.slug}`);
+  revalidatePath(`/properties/${slug}`);
   return { success: true };
 }
 
@@ -71,16 +80,20 @@ export async function createBlog(data: unknown) {
   const parsed = blogSchema.safeParse(data);
   if (!parsed.success) return { error: parsed.error.flatten() };
 
+  // Auto-generate slug from title if not provided
+  const slug = parsed.data.slug || slugify(parsed.data.title, { lower: true, strict: true });
+
   const blog = await prisma.blog.create({
     data: {
       ...parsed.data,
+      slug,
       authorId: session.user.id,
       publishedAt: parsed.data.status === "PUBLISHED" ? new Date() : null,
     },
   });
 
   revalidatePath("/blog");
-  revalidatePath(`/blog/${parsed.data.slug}`);
+  revalidatePath(`/blog/${slug}`);
   revalidatePath("/");
   revalidatePath("/sitemap.xml");
   return { success: true, id: blog.id };
@@ -93,16 +106,20 @@ export async function updateBlog(id: string, data: unknown) {
   const parsed = blogSchema.safeParse(data);
   if (!parsed.success) return { error: parsed.error.flatten() };
 
+  // Auto-generate slug from title if not provided
+  const slug = parsed.data.slug || slugify(parsed.data.title, { lower: true, strict: true });
+
   await prisma.blog.update({
     where: { id },
     data: {
       ...parsed.data,
+      slug,
       publishedAt: parsed.data.status === "PUBLISHED" ? new Date() : undefined,
     },
   });
 
   revalidatePath("/blog");
-  revalidatePath(`/blog/${parsed.data.slug}`);
+  revalidatePath(`/blog/${slug}`);
   revalidatePath("/");
   revalidatePath("/sitemap.xml");
   return { success: true };
