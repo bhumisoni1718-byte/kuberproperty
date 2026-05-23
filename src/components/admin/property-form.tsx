@@ -18,7 +18,6 @@ import type { Property } from "@prisma/client";
 export function PropertyForm({ property }: { property?: Property }) {
   const router = useRouter();
   const [images, setImages] = useState<string[]>(property?.images || []);
-  const [uploading, setUploading] = useState(false);
 
   const { register, handleSubmit, setValue, formState: { isSubmitting } } = useForm({
     resolver: zodResolver(propertySchema),
@@ -65,21 +64,12 @@ export function PropertyForm({ property }: { property?: Property }) {
         },
   });
 
-  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = e.target.files;
-    if (!files?.length) return;
-    setUploading(true);
-    for (const file of Array.from(files)) {
-      const fd = new FormData();
-      fd.append("file", file);
-      fd.append("folder", "properties");
-      const res = await fetch("/api/upload", { method: "POST", body: fd });
-      const json = await res.json();
-      if (json.url) {
-        setImages((prev) => [...prev, json.url]);
-      }
-    }
-    setUploading(false);
+  function handleImageUrlChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    const urls = e.target.value
+      .split("\n")
+      .map((url) => url.trim())
+      .filter(Boolean);
+    setImages(urls);
   }
 
   async function onSubmit(data: z.infer<typeof propertySchema>) {
@@ -179,9 +169,15 @@ export function PropertyForm({ property }: { property?: Property }) {
           />
         </div>
         <div className="sm:col-span-2">
-          <Label>Images</Label>
-          <Input type="file" multiple accept="image/*" onChange={handleUpload} className="mt-1" />
-          {uploading && <p className="text-sm text-navy/50">Uploading...</p>}
+          <Label>Image URLs (one per line)</Label>
+          <Textarea
+            rows={4}
+            placeholder="https://res.cloudinary.com/your-cloud-name/image/upload/v123/property1.jpg&#10;https://res.cloudinary.com/your-cloud-name/image/upload/v123/property2.jpg"
+            defaultValue={images.join("\n")}
+            onChange={handleImageUrlChange}
+            className="mt-1"
+          />
+          <p className="text-sm text-navy/50 mt-1">Upload images to Cloudinary, then paste URLs here (one per line)</p>
           <div className="mt-2 flex flex-wrap gap-2">
             {images.map((img) => (
               <img key={img} src={img} alt="" className="h-16 w-16 rounded object-cover" />
