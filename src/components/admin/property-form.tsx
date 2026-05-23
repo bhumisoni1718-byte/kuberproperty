@@ -155,6 +155,18 @@ export function PropertyForm({ property }: { property?: Property }) {
           <Label>State</Label>
           <Input {...register("state")} className="mt-1" />
         </div>
+        <div>
+          <Label>Pincode</Label>
+          <Input type="text" {...register("pincode")} className="mt-1" />
+        </div>
+        <div>
+          <Label>Latitude</Label>
+          <Input type="number" step="any" {...register("latitude")} className="mt-1" />
+        </div>
+        <div>
+          <Label>Longitude</Label>
+          <Input type="number" step="any" {...register("longitude")} className="mt-1" />
+        </div>
         <div className="sm:col-span-2">
           <Label>Amenities (comma separated)</Label>
           <Input
