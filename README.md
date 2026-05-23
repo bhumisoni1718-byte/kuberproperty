@@ -76,8 +76,71 @@ docs/
 
 ## Deployment
 
-- **Vercel**: See [docs/DEPLOYMENT-VERCEL.md](docs/DEPLOYMENT-VERCEL.md)
+### Recommended: Vercel (All-in-One Deployment)
+
+**Good news:** Your Next.js application can be deployed as a single unit on Vercel. The frontend and backend (API routes) are part of the same Next.js application, so they don't need separate deployments.
+
+**What gets deployed together:**
+- ✅ Frontend (React/Next.js pages)
+- ✅ Backend (API routes & server actions)
+- ✅ Static assets
+- ✅ Edge functions
+
+**Already cloud-hosted (no deployment needed):**
+- ✅ MongoDB Atlas (database)
+- ✅ Resend (email service)
+
+### Quick Deploy to Vercel
+
+1. **Push your code to GitHub** (already done)
+2. **Go to [vercel.com](https://vercel.com)** and sign up/login
+3. **Click "Add New Project"**
+4. **Import your GitHub repository:** `bhumisoni1718-byte/kuberproperty`
+5. **Configure environment variables** (copy from your local `.env`):
+   ```
+   DATABASE_URL
+   AUTH_SECRET
+   AUTH_URL
+   RESEND_API_KEY
+   RESEND_FROM_EMAIL
+   RESEND_FALLBACK_FROM
+   REPLY_TO_EMAIL
+   LEAD_NOTIFICATION_EMAIL
+   CLOUDINARY_CLOUD_NAME
+   CLOUDINARY_API_KEY
+   CLOUDINARY_API_SECRET
+   NEXT_PUBLIC_APP_URL
+   ```
+6. **Click "Deploy"**
+
+Vercel will automatically:
+- Build your Next.js application
+- Deploy it globally
+- Set up SSL/HTTPS
+- Provide a `.vercel.app` domain
+- Handle continuous deployments on git push
+
+### After Deployment
+
+1. **Update your domain** (optional):
+   - Add custom domain in Vercel dashboard
+   - Update `NEXT_PUBLIC_APP_URL` and `AUTH_URL` environment variables
+
+2. **Seed production database** (if needed):
+   ```bash
+   npx prisma db push
+   npm run db:seed
+   ```
+
+3. **Verify email sending**:
+   - Test contact form
+   - Check Resend dashboard for delivery
+
+### Alternative Platforms
+
 - **Render**: See [docs/DEPLOYMENT-RENDER.md](docs/DEPLOYMENT-RENDER.md)
+- **Railway**: Similar to Vercel, supports Next.js
+- **Netlify**: Supports Next.js with some configuration
 
 ## License
 

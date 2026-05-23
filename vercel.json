@@ -1,0 +1,39 @@
+{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "regions": ["hkg1"],
+  "env": {
+    "NEXT_PUBLIC_APP_URL": {
+      "description": "Your production domain URL"
+    },
+    "DATABASE_URL": {
+      "description": "MongoDB Atlas connection string"
+    },
+    "AUTH_SECRET": {
+      "description": "NextAuth secret key (generate with openssl rand -base64 32)"
+    },
+    "AUTH_URL": {
+      "description": "Your production domain URL for NextAuth"
+    },
+    "RESEND_API_KEY": {
+      "description": "Resend API key for email sending"
+    },
+    "RESEND_FROM_EMAIL": {
+      "description": "Sender email address (verified domain)"
+    },
+    "LEAD_NOTIFICATION_EMAIL": {
+      "description": "Admin email for lead notifications"
+    },
+    "CLOUDINARY_CLOUD_NAME": {
+      "description": "Cloudinary cloud name"
+    },
+    "CLOUDINARY_API_KEY": {
+      "description": "Cloudinary API key"
+    },
+    "CLOUDINARY_API_SECRET": {
+      "description": "Cloudinary API secret"
+    }
+  }
+}
