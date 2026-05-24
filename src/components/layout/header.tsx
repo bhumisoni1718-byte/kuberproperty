@@ -14,7 +14,6 @@ const navLinks = [
   { href: "/blog", label: "Blog" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
-  { href: "/account/saved-searches", label: "Saved Searches" },
 ];
 
 export function Header() {
@@ -50,9 +49,6 @@ export function Header() {
             <Phone className="h-4 w-4 text-gold" />
             {CONTACT.phone}
           </a>
-          <Link href="/account/saved-searches" className="text-sm text-white/80 hover:text-gold transition">
-            Saved Searches
-          </Link>
           <Button variant="gold" size="sm" asChild>
             <Link href="/contact">Get Consultation</Link>
           </Button>
