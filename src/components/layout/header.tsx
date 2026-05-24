@@ -9,11 +9,11 @@ import { CONTACT, SITE_NAME } from "@/lib/constants";
 
 const navLinks = [
   { href: "/", label: "Home" },
+  { href: "/about", label: "About" },
   { href: "/properties", label: "Properties" },
   { href: "/areas", label: "Areas" },
   { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
-  { href: "/about", label: "About" },
 ];
 
 export function Header() {
