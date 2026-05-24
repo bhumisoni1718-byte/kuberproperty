@@ -12,6 +12,7 @@ export function PropertySearch({ compact = false }: { compact?: boolean }) {
   const params = useSearchParams();
   const [city, setCity] = useState(params.get("city") || "Vadodara");
   const [type, setType] = useState(params.get("type") || "");
+  const [listingType, setListingType] = useState(params.get("listingType") || "");
   const [bedrooms, setBedrooms] = useState(params.get("bedrooms") || "");
   const [minPrice, setMinPrice] = useState(params.get("minPrice") || "");
   const [maxPrice, setMaxPrice] = useState(params.get("maxPrice") || "");
@@ -23,6 +24,7 @@ export function PropertySearch({ compact = false }: { compact?: boolean }) {
     if (q) search.set("q", q);
     if (city) search.set("city", city);
     if (type) search.set("type", type);
+    if (listingType) search.set("listingType", listingType);
     if (bedrooms) search.set("bedrooms", bedrooms);
     if (minPrice) search.set("minPrice", minPrice);
     if (maxPrice) search.set("maxPrice", maxPrice);
@@ -55,6 +57,15 @@ export function PropertySearch({ compact = false }: { compact?: boolean }) {
               {t}
             </option>
           ))}
+        </select>
+        <select
+          value={listingType}
+          onChange={(e) => setListingType(e.target.value)}
+          className="h-10 rounded-md border border-navy/15 px-3 text-sm text-navy"
+        >
+          <option value="">Listing Type</option>
+          <option value="SALE">For Sale</option>
+          <option value="RENT">For Rent</option>
         </select>
         <select
           value={bedrooms}

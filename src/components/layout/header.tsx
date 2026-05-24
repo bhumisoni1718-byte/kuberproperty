@@ -20,10 +20,10 @@ export function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-white/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-navy/95 backdrop-blur-xl animate-fade-in">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 lg:h-20 lg:px-8">
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-xl font-bold tracking-tight text-navy lg:text-2xl">
+          <span className="text-xl font-bold tracking-tight text-white lg:text-2xl">
             {SITE_NAME}
           </span>
           <span className="hidden h-4 w-px bg-gold sm:block" />
@@ -37,7 +37,7 @@ export function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-navy/80 transition hover:text-gold"
+              className="text-sm font-medium text-white/80 transition hover:text-gold"
             >
               {link.label}
             </Link>
@@ -45,7 +45,7 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <a href={`tel:${CONTACT.phone}`} className="flex items-center gap-1 text-sm text-navy">
+          <a href={`tel:${CONTACT.phone}`} className="flex items-center gap-1 text-sm text-white">
             <Phone className="h-4 w-4 text-gold" />
             {CONTACT.phone}
           </a>
@@ -59,13 +59,13 @@ export function Header() {
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
         >
-          {open ? <X className="h-6 w-6 text-navy" /> : <Menu className="h-6 w-6 text-navy" />}
+          {open ? <X className="h-6 w-6 text-white" /> : <Menu className="h-6 w-6 text-white" />}
         </button>
       </div>
 
       <div
         className={cn(
-          "lg:hidden overflow-hidden border-t border-navy/10 bg-white transition-all",
+          "lg:hidden overflow-hidden border-t border-white/10 bg-navy transition-all",
           open ? "max-h-96" : "max-h-0"
         )}
       >
@@ -74,7 +74,7 @@ export function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-navy font-medium"
+              className="text-white font-medium"
               onClick={() => setOpen(false)}
             >
               {link.label}

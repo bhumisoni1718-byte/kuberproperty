@@ -28,6 +28,7 @@ export function PropertyForm({ property }: { property?: Property }) {
           description: property.description,
           price: property.price,
           propertyType: property.propertyType,
+          listingType: property.listingType || "SALE",
           bedrooms: property.bedrooms ?? undefined,
           bathrooms: property.bathrooms ?? undefined,
           areaSqFt: property.areaSqFt ?? undefined,
@@ -42,6 +43,7 @@ export function PropertyForm({ property }: { property?: Property }) {
           featuredImage: property.featuredImage ?? undefined,
           videos: property.videos,
           virtualTourUrl: property.virtualTourUrl || "",
+          youtubeVideoUrl: property.youtubeVideoUrl || "",
           floorPlans: property.floorPlans,
           possession: property.possession ?? undefined,
           builder: property.builder ?? undefined,
@@ -55,6 +57,7 @@ export function PropertyForm({ property }: { property?: Property }) {
         }
       : {
           status: "DRAFT",
+          listingType: "SALE",
           amenities: [],
           images: [],
           videos: [],
@@ -108,6 +111,13 @@ export function PropertyForm({ property }: { property?: Property }) {
             {PROPERTY_TYPES.map((t) => (
               <option key={t} value={t}>{t}</option>
             ))}
+          </select>
+        </div>
+        <div>
+          <Label>Listing Type</Label>
+          <select {...register("listingType")} className="mt-1 w-full h-10 rounded-md border px-3 text-sm">
+            <option value="SALE">For Sale</option>
+            <option value="RENT">For Rent</option>
           </select>
         </div>
         <div>
@@ -202,7 +212,11 @@ export function PropertyForm({ property }: { property?: Property }) {
         </div>
         <div>
           <Label>Virtual Tour URL</Label>
-          <Input {...register("virtualTourUrl")} className="mt-1" />
+          <Input {...register("virtualTourUrl")} className="mt-1" placeholder="https://matterport.com/..." />
+        </div>
+        <div>
+          <Label>YouTube Video URL</Label>
+          <Input {...register("youtubeVideoUrl")} className="mt-1" placeholder="https://youtube.com/watch?v=..." />
         </div>
         <div className="sm:col-span-2">
           <Label>SEO Description</Label>

@@ -11,6 +11,7 @@ export type PropertyCardData = {
   price: number;
   city: string;
   propertyType: string;
+  listingType?: string;
   bedrooms?: number | null;
   bathrooms?: number | null;
   areaSqFt?: number | null;
@@ -26,7 +27,7 @@ export function PropertyCard({ property }: { property: PropertyCardData }) {
     "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80";
 
   return (
-    <article className="group overflow-hidden rounded-xl border border-navy/10 bg-white shadow-sm transition hover:shadow-xl">
+    <article className="group overflow-hidden rounded-xl border border-navy/10 bg-white shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-fade-in-up">
       <Link href={`/properties/${property.slug}`} className="block">
         <div className="relative aspect-[4/3] overflow-hidden">
           <Image
@@ -41,6 +42,11 @@ export function PropertyCard({ property }: { property: PropertyCardData }) {
               Featured
             </Badge>
           )}
+          {property.listingType === "RENT" && (
+            <Badge className="absolute right-3 top-3 bg-emerald-600 text-white">
+              For Rent
+            </Badge>
+          )}
           <div className="absolute bottom-3 left-3 rounded-md bg-navy/90 px-3 py-1 text-sm font-semibold text-white">
             {formatPrice(property.price)}
           </div>
@@ -49,7 +55,7 @@ export function PropertyCard({ property }: { property: PropertyCardData }) {
           <p className="text-xs font-medium uppercase tracking-wider text-gold">
             {property.propertyType}
           </p>
-          <h3 className="mt-1 text-lg font-semibold text-navy line-clamp-2 group-hover:text-gold transition">
+          <h3 className="mt-1 text-lg font-semibold text-navy line-clamp-2 group-hover:text-gold transition-colors duration-200">
             {property.title}
           </h3>
           <p className="mt-2 flex items-center gap-1 text-sm text-navy/60">

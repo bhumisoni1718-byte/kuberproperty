@@ -62,13 +62,13 @@ export default async function PropertyDetailPage({ params }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }} />
 
       <article className="bg-white">
-        <nav className="container mx-auto px-4 py-4 text-sm text-navy/60 lg:px-8">
+        <nav className="container mx-auto px-4 py-4 text-sm text-navy/60 lg:px-8 animate-fade-in">
           <Link href="/">Home</Link> / <Link href="/properties">Properties</Link> /{" "}
           <span className="text-navy">{property.title}</span>
         </nav>
 
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3 animate-fade-in-up">
             {images.slice(0, 5).map((img, i) => (
               <div
                 key={img}
@@ -80,10 +80,13 @@ export default async function PropertyDetailPage({ params }: Props) {
           </div>
 
           <div className="mt-10 grid gap-10 lg:grid-cols-3">
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 space-y-8 animate-fade-in-up">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
                   <Badge variant="gold">{property.propertyType}</Badge>
+                  {property.listingType === "RENT" && (
+                    <Badge className="ml-2 bg-emerald-600 text-white">For Rent</Badge>
+                  )}
                   <h1 className="mt-2 font-display text-3xl font-bold text-navy md:text-4xl">
                     {property.title}
                   </h1>
@@ -94,7 +97,7 @@ export default async function PropertyDetailPage({ params }: Props) {
                 <p className="text-3xl font-bold text-gold">{formatPrice(property.price)}</p>
               </div>
 
-              <div className="mt-6 flex flex-wrap gap-6 text-navy/80">
+              <div className="flex flex-wrap gap-6 text-navy/80">
                 {property.bedrooms != null && (
                   <span className="flex items-center gap-2"><Bed className="h-5 w-5 text-gold" /> {property.bedrooms} BHK</span>
                 )}
@@ -106,13 +109,13 @@ export default async function PropertyDetailPage({ params }: Props) {
                 )}
               </div>
 
-              <div className="mt-8 prose max-w-none text-navy/80">
+              <div className="prose max-w-none text-navy/80">
                 <h2 className="text-xl font-semibold text-navy">Description</h2>
                 <p className="mt-2 whitespace-pre-line leading-relaxed">{property.description}</p>
               </div>
 
               {property.amenities.length > 0 && (
-                <div className="mt-8">
+                <div>
                   <h2 className="text-xl font-semibold text-navy">Amenities</h2>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {property.amenities.map((a) => (
@@ -123,7 +126,7 @@ export default async function PropertyDetailPage({ params }: Props) {
               )}
 
               {property.virtualTourUrl && (
-                <div className="mt-8">
+                <div>
                   <h2 className="text-xl font-semibold text-navy">Virtual Tour</h2>
                   <a
                     href={property.virtualTourUrl}
@@ -136,12 +139,27 @@ export default async function PropertyDetailPage({ params }: Props) {
                 </div>
               )}
 
-              <div className="mt-10">
+              {property.youtubeVideoUrl && (
+                <div>
+                  <h2 className="text-xl font-semibold text-navy">Video Tour</h2>
+                  <div className="mt-4 aspect-video overflow-hidden rounded-xl">
+                    <iframe
+                      src={property.youtubeVideoUrl.replace('watch?v=', 'embed/')}
+                      title="Property Video Tour"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="w-full h-full"
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div>
                 <EMICalculator defaultAmount={property.price * 0.8} />
               </div>
 
               {property.latitude && property.longitude && (
-                <div className="mt-10">
+                <div>
                   <h2 className="text-xl font-semibold text-navy mb-4">Location</h2>
                   <iframe
                     title="Property location"
@@ -153,7 +171,7 @@ export default async function PropertyDetailPage({ params }: Props) {
               )}
             </div>
 
-            <aside className="space-y-6">
+            <aside className="space-y-6 animate-fade-in-up">
               <div className="glass-card p-6 sticky top-24">
                 <h2 className="text-lg font-semibold text-navy">Schedule a Visit</h2>
                 <InquiryForm
@@ -186,7 +204,7 @@ export default async function PropertyDetailPage({ params }: Props) {
           </div>
 
           {similar.length > 0 && (
-            <section className="mt-16 pb-16">
+            <section className="mt-16 pb-16 animate-fade-in-up">
               <h2 className="font-display text-2xl font-bold text-navy">Similar Properties</h2>
               <div className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
                 {similar.map((p) => (

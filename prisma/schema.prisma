@@ -20,6 +20,11 @@ enum PropertyStatus {
   ARCHIVED
 }
 
+enum ListingType {
+  SALE
+  RENT
+}
+
 enum LeadStatus {
   NEW
   CONTACTED
@@ -98,6 +103,7 @@ model Property {
   description     String
   price           Float
   propertyType    String
+  listingType     ListingType    @default(SALE)
   bedrooms        Int?
   bathrooms       Int?
   areaSqFt        Float?
@@ -112,6 +118,7 @@ model Property {
   featuredImage   String?
   videos          String[]
   virtualTourUrl  String?
+  youtubeVideoUrl String?
   floorPlans      String[]
   nearbyPlaces    Json?
   possession      String?
@@ -135,6 +142,7 @@ model Property {
 
   @@index([city])
   @@index([propertyType])
+  @@index([listingType])
   @@index([status])
   @@index([featured])
   @@index([price])

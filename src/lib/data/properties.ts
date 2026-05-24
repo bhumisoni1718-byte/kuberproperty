@@ -5,6 +5,7 @@ export type PropertyFilters = {
   q?: string;
   city?: string;
   type?: string;
+  listingType?: string;
   bedrooms?: number;
   minPrice?: number;
   maxPrice?: number;
@@ -24,6 +25,7 @@ export async function getProperties(filters: PropertyFilters = {}) {
     q,
     city,
     type,
+    listingType,
     bedrooms,
     minPrice,
     maxPrice,
@@ -40,6 +42,7 @@ export async function getProperties(filters: PropertyFilters = {}) {
 
   if (city) where.city = { contains: city, mode: "insensitive" };
   if (type) where.propertyType = type;
+  if (listingType) where.listingType = listingType;
   if (bedrooms) where.bedrooms = bedrooms;
   if (featured) where.featured = true;
   if (builder) where.builder = { contains: builder, mode: "insensitive" };
