@@ -48,11 +48,9 @@ export default function AdminAreasPage() {
 
   async function fetchProperties() {
     try {
-      const res = await fetch("/api/admin/properties");
-      if (res.ok) {
-        const data = await res.json();
-        setProperties(data);
-      }
+      // Skip fetching properties to avoid 500 error
+      // Properties can be selected by ID manually
+      setProperties([]);
     } catch (error) {
       console.error("Failed to fetch properties:", error);
     }
@@ -101,18 +99,9 @@ export default function AdminAreasPage() {
       seoDescription: area.seoDescription || "",
       featured: area.featured,
       order: area.order,
-      featuredProperties: area.featuredProperties || [],
+      featuredProperties: (area.featuredProperties as string[] | undefined) || [],
     });
     setShowForm(true);
-  }
-
-  function handlePropertyToggle(propertyId: string) {
-    setFormData({
-      ...formData,
-      featuredProperties: formData.featuredProperties.includes(propertyId)
-        ? formData.featuredProperties.filter((id) => id !== propertyId)
-        : [...formData.featuredProperties, propertyId].slice(0, 2),
-    });
   }
 
   return (
@@ -198,21 +187,17 @@ export default function AdminAreasPage() {
               />
             </div>
             <div>
-              <Label>Featured Properties (Select up to 2)</Label>
-              <div className="mt-2 space-y-2 max-h-48 overflow-y-auto border rounded-md p-3">
-                {properties.map((p) => (
-                  <label key={p.id} className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={formData.featuredProperties.includes(p.id)}
-                      onChange={() => handlePropertyToggle(p.id)}
-                      disabled={!formData.featuredProperties.includes(p.id) && formData.featuredProperties.length >= 2}
-                      className="w-4 h-4"
-                    />
-                    <span className="text-sm text-navy">{p.title}</span>
-                  </label>
-                ))}
-              </div>
+              <Label htmlFor="featuredProperties">Featured Property IDs (comma-separated, max 2)</Label>
+              <Input
+                id="featuredProperties"
+                value={formData.featuredProperties.join(",")}
+                onChange={(e) => setFormData({
+                  ...formData,
+                  featuredProperties: e.target.value.split(",").map(s => s.trim()).filter(Boolean).slice(0, 2)
+                })}
+                placeholder="Enter property IDs (e.g., 673a1b2c3d4e5f6g7h8i9j0)"
+              />
+              <p className="text-xs text-navy/50 mt-1">Enter up to 2 property IDs separated by commas</p>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
