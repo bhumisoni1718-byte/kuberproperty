@@ -17,13 +17,7 @@ export default function AdminAreasPage() {
     name: "",
     slug: "",
     description: "",
-    content: "",
-    image: "",
-    seoTitle: "",
-    seoDescription: "",
     featured: false,
-    order: 0,
-    featuredProperties: [] as string[],
   });
   const [loading, setLoading] = useState(true);
 
@@ -69,13 +63,7 @@ export default function AdminAreasPage() {
       name: "",
       slug: "",
       description: "",
-      content: "",
-      image: "",
-      seoTitle: "",
-      seoDescription: "",
       featured: false,
-      order: 0,
-      featuredProperties: [],
     });
     fetchAreas();
   }
@@ -93,13 +81,7 @@ export default function AdminAreasPage() {
       name: area.name,
       slug: area.slug,
       description: area.description || "",
-      content: area.content || "",
-      image: area.image || "",
-      seoTitle: area.seoTitle || "",
-      seoDescription: area.seoDescription || "",
       featured: area.featured,
-      order: area.order,
-      featuredProperties: (area.featuredProperties as string[] | undefined) || [],
     });
     setShowForm(true);
   }
@@ -139,87 +121,23 @@ export default function AdminAreasPage() {
               />
             </div>
             <div>
-              <Label htmlFor="description">Short Description</Label>
+              <Label htmlFor="description">Description</Label>
               <Input
                 id="description"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               />
             </div>
-            <div>
-              <Label htmlFor="content">Content (HTML)</Label>
-              <textarea
-                id="content"
-                value={formData.content}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                rows={10}
-                className="w-full rounded-md border px-3 py-2 text-sm"
-                placeholder="Enter HTML content with links and images..."
-              />
-            </div>
-            <div>
-              <Label htmlFor="image">Image URL</Label>
-              <Input
-                id="image"
-                value={formData.image}
-                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                placeholder="https://..."
-              />
-            </div>
-            <div>
-              <Label htmlFor="seoTitle">SEO Title</Label>
-              <Input
-                id="seoTitle"
-                value={formData.seoTitle}
-                onChange={(e) => setFormData({ ...formData, seoTitle: e.target.value })}
-                placeholder="Custom SEO title"
-              />
-            </div>
-            <div>
-              <Label htmlFor="seoDescription">SEO Description</Label>
-              <textarea
-                id="seoDescription"
-                value={formData.seoDescription}
-                onChange={(e) => setFormData({ ...formData, seoDescription: e.target.value })}
-                rows={3}
-                className="w-full rounded-md border px-3 py-2 text-sm"
-                placeholder="Custom SEO description"
-              />
-            </div>
-            <div>
-              <Label htmlFor="featuredProperties">Featured Property IDs (comma-separated, max 2)</Label>
-              <Input
-                id="featuredProperties"
-                value={formData.featuredProperties.join(",")}
-                onChange={(e) => setFormData({
-                  ...formData,
-                  featuredProperties: e.target.value.split(",").map(s => s.trim()).filter(Boolean).slice(0, 2)
-                })}
-                placeholder="Enter property IDs (e.g., 673a1b2c3d4e5f6g7h8i9j0)"
-              />
-              <p className="text-xs text-navy/50 mt-1">Enter up to 2 property IDs separated by commas</p>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="order">Order</Label>
-                <Input
-                  id="order"
-                  type="number"
-                  value={formData.order}
-                  onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })}
+            <div className="flex items-center">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.featured}
+                  onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
+                  className="w-4 h-4"
                 />
-              </div>
-              <div className="flex items-center pt-6">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={formData.featured}
-                    onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
-                    className="w-4 h-4"
-                  />
-                  <span className="text-sm text-navy">Featured Area</span>
-                </label>
-              </div>
+                <span className="text-sm text-navy">Featured Area</span>
+              </label>
             </div>
             <div className="flex gap-2">
               <Button type="submit" variant="gold">

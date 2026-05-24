@@ -284,26 +284,14 @@ export async function createArea(data: unknown) {
     name: string;
     slug: string;
     description?: string;
-    content?: string;
-    image?: string;
-    seoTitle?: string;
-    seoDescription?: string;
     featured?: boolean;
-    order?: number;
-    featuredProperties?: string[];
   };
   await prisma.area.create({
     data: {
       name: parsed.name,
       slug: parsed.slug,
       description: parsed.description || "",
-      content: parsed.content || "",
-      image: parsed.image || "",
-      seoTitle: parsed.seoTitle || "",
-      seoDescription: parsed.seoDescription || "",
       featured: parsed.featured || false,
-      order: parsed.order || 0,
-      featuredProperties: parsed.featuredProperties || [],
     },
   });
   revalidatePath("/areas");
@@ -317,13 +305,7 @@ export async function updateArea(id: string, data: unknown) {
     name: string;
     slug: string;
     description?: string;
-    content?: string;
-    image?: string;
-    seoTitle?: string;
-    seoDescription?: string;
     featured?: boolean;
-    order?: number;
-    featuredProperties?: string[];
   };
   await prisma.area.update({
     where: { id },
@@ -331,13 +313,7 @@ export async function updateArea(id: string, data: unknown) {
       name: parsed.name,
       slug: parsed.slug,
       description: parsed.description || "",
-      content: parsed.content || "",
-      image: parsed.image || "",
-      seoTitle: parsed.seoTitle || "",
-      seoDescription: parsed.seoDescription || "",
       featured: parsed.featured || false,
-      order: parsed.order || 0,
-      featuredProperties: parsed.featuredProperties || [],
     },
   });
   revalidatePath("/areas");

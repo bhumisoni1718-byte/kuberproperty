@@ -4,7 +4,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { PropertyCard } from "@/components/property/property-card";
 import { buildMetadata, breadcrumbJsonLd, faqJsonLd } from "@/lib/seo";
-import { getProperties } from "@/lib/data/properties";
+import { getProperties, getFeaturedProperties } from "@/lib/data/properties";
 import { absoluteUrl } from "@/lib/utils";
 
 export const revalidate = 3600;
@@ -32,13 +32,7 @@ export default async function AreaPage({ params }: Props) {
 
   const properties = await getProperties({ areaSlug: slug, limit: 12 });
 
-  // Get manually selected featured properties for this area
-  const featuredProperties = (area as any).featuredProperties && (area as any).featuredProperties.length > 0
-    ? await prisma.property.findMany({
-        where: { id: { in: (area as any).featuredProperties } },
-        take: 2,
-      })
-    : [];
+  const featured = await getFeaturedProperties(2);
 
   const faqs = [
     {
@@ -95,18 +89,18 @@ export default async function AreaPage({ params }: Props) {
           <h1 className="mt-2 font-display text-3xl font-bold text-navy md:text-4xl">Properties in {area.name}</h1>
           <p className="mt-4 text-navy/60">{area.city}, {area.state}</p>
 
-          {(area as any).content && (
+          {area.description && (
             <div
               className="prose-blog mt-10"
-              dangerouslySetInnerHTML={{ __html: (area as any).content }}
+              dangerouslySetInnerHTML={{ __html: area.description }}
             />
           )}
 
-          {featuredProperties.length > 0 && (
+          {featured.length > 0 && (
             <section className="mt-16 border-t pt-12">
               <h2 className="text-2xl font-semibold text-navy">Featured Properties in {area.name}</h2>
               <div className="mt-6 grid gap-8 sm:grid-cols-2">
-                {featuredProperties.map((p) => (
+                {featured.map((p) => (
                   <PropertyCard key={p.id} property={p} />
                 ))}
               </div>
