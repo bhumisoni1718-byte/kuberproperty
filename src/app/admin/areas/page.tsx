@@ -10,13 +10,26 @@ import { Plus, Pencil, Trash2 } from "lucide-react";
 
 export default function AdminAreasPage() {
   const [areas, setAreas] = useState<any[]>([]);
+  const [properties, setProperties] = useState<any[]>([]);
   const [editing, setEditing] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({ name: "", slug: "", description: "", featured: false, order: 0 });
+  const [formData, setFormData] = useState({
+    name: "",
+    slug: "",
+    description: "",
+    content: "",
+    image: "",
+    seoTitle: "",
+    seoDescription: "",
+    featured: false,
+    order: 0,
+    featuredProperties: [] as string[],
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchAreas();
+    fetchProperties();
   }, []);
 
   async function fetchAreas() {
@@ -33,6 +46,18 @@ export default function AdminAreasPage() {
     }
   }
 
+  async function fetchProperties() {
+    try {
+      const res = await fetch("/api/admin/properties");
+      if (res.ok) {
+        const data = await res.json();
+        setProperties(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch properties:", error);
+    }
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (editing) {
@@ -42,7 +67,18 @@ export default function AdminAreasPage() {
     }
     setEditing(null);
     setShowForm(false);
-    setFormData({ name: "", slug: "", description: "", featured: false, order: 0 });
+    setFormData({
+      name: "",
+      slug: "",
+      description: "",
+      content: "",
+      image: "",
+      seoTitle: "",
+      seoDescription: "",
+      featured: false,
+      order: 0,
+      featuredProperties: [],
+    });
     fetchAreas();
   }
 
@@ -59,10 +95,24 @@ export default function AdminAreasPage() {
       name: area.name,
       slug: area.slug,
       description: area.description || "",
+      content: area.content || "",
+      image: area.image || "",
+      seoTitle: area.seoTitle || "",
+      seoDescription: area.seoDescription || "",
       featured: area.featured,
       order: area.order,
+      featuredProperties: area.featuredProperties || [],
     });
     setShowForm(true);
+  }
+
+  function handlePropertyToggle(propertyId: string) {
+    setFormData({
+      ...formData,
+      featuredProperties: formData.featuredProperties.includes(propertyId)
+        ? formData.featuredProperties.filter((id) => id !== propertyId)
+        : [...formData.featuredProperties, propertyId].slice(0, 2),
+    });
   }
 
   return (
@@ -100,12 +150,69 @@ export default function AdminAreasPage() {
               />
             </div>
             <div>
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">Short Description</Label>
               <Input
                 id="description"
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               />
+            </div>
+            <div>
+              <Label htmlFor="content">Content (HTML)</Label>
+              <textarea
+                id="content"
+                value={formData.content}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                rows={10}
+                className="w-full rounded-md border px-3 py-2 text-sm"
+                placeholder="Enter HTML content with links and images..."
+              />
+            </div>
+            <div>
+              <Label htmlFor="image">Image URL</Label>
+              <Input
+                id="image"
+                value={formData.image}
+                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                placeholder="https://..."
+              />
+            </div>
+            <div>
+              <Label htmlFor="seoTitle">SEO Title</Label>
+              <Input
+                id="seoTitle"
+                value={formData.seoTitle}
+                onChange={(e) => setFormData({ ...formData, seoTitle: e.target.value })}
+                placeholder="Custom SEO title"
+              />
+            </div>
+            <div>
+              <Label htmlFor="seoDescription">SEO Description</Label>
+              <textarea
+                id="seoDescription"
+                value={formData.seoDescription}
+                onChange={(e) => setFormData({ ...formData, seoDescription: e.target.value })}
+                rows={3}
+                className="w-full rounded-md border px-3 py-2 text-sm"
+                placeholder="Custom SEO description"
+              />
+            </div>
+            <div>
+              <Label>Featured Properties (Select up to 2)</Label>
+              <div className="mt-2 space-y-2 max-h-48 overflow-y-auto border rounded-md p-3">
+                {properties.map((p) => (
+                  <label key={p.id} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={formData.featuredProperties.includes(p.id)}
+                      onChange={() => handlePropertyToggle(p.id)}
+                      disabled={!formData.featuredProperties.includes(p.id) && formData.featuredProperties.length >= 2}
+                      className="w-4 h-4"
+                    />
+                    <span className="text-sm text-navy">{p.title}</span>
+                  </label>
+                ))}
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -125,7 +232,7 @@ export default function AdminAreasPage() {
                     onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
                     className="w-4 h-4"
                   />
-                  <span className="text-sm text-navy">Featured</span>
+                  <span className="text-sm text-navy">Featured Area</span>
                 </label>
               </div>
             </div>

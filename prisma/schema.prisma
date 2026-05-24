@@ -256,10 +256,12 @@ model Area {
   city           String     @default("Vadodara")
   state          String     @default("Gujarat")
   description    String?
+  content        String?
   image          String?
   seoTitle       String?
   seoDescription String?
   featured       Boolean    @default(false)
+  featuredProperties String[] @default([])
   properties     Property[]
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @updatedAt

@@ -280,7 +280,18 @@ export async function deleteTestimonial(id: string) {
 
 export async function createArea(data: unknown) {
   const session = await requireAuth(["ADMIN"]);
-  const parsed = data as { name: string; slug: string; description: string; featured: boolean; order: number };
+  const parsed = data as {
+    name: string;
+    slug: string;
+    description: string;
+    content: string;
+    image: string;
+    seoTitle: string;
+    seoDescription: string;
+    featured: boolean;
+    order: number;
+    featuredProperties: string[];
+  };
   await prisma.area.create({
     data: parsed,
   });
@@ -291,7 +302,18 @@ export async function createArea(data: unknown) {
 
 export async function updateArea(id: string, data: unknown) {
   const session = await requireAuth(["ADMIN"]);
-  const parsed = data as { name: string; slug: string; description: string; featured: boolean; order: number };
+  const parsed = data as {
+    name: string;
+    slug: string;
+    description: string;
+    content: string;
+    image: string;
+    seoTitle: string;
+    seoDescription: string;
+    featured: boolean;
+    order: number;
+    featuredProperties: string[];
+  };
   await prisma.area.update({
     where: { id },
     data: parsed,

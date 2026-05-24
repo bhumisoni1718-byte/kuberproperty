@@ -20,7 +20,7 @@ export default async function AreasPage() {
     []
   );
 
-  const featured = await getFeaturedProperties(3);
+  const featured = await getFeaturedProperties(2);
 
   const breadcrumbs = breadcrumbJsonLd([
     { name: "Home", url: absoluteUrl() },
@@ -42,7 +42,7 @@ export default async function AreasPage() {
         {featured.length > 0 && (
           <section className="container mx-auto px-4 py-12 lg:px-8 animate-fade-in-up">
             <h2 className="font-display text-2xl font-bold text-navy">Featured Properties</h2>
-            <div className="mt-6 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-6 grid gap-8 sm:grid-cols-2">
               {featured.map((p) => (
                 <PropertyCard key={p.id} property={p} />
               ))}
