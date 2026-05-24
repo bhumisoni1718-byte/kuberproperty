@@ -283,17 +283,28 @@ export async function createArea(data: unknown) {
   const parsed = data as {
     name: string;
     slug: string;
-    description: string;
-    content: string;
-    image: string;
-    seoTitle: string;
-    seoDescription: string;
-    featured: boolean;
-    order: number;
-    featuredProperties: string[];
+    description?: string;
+    content?: string;
+    image?: string;
+    seoTitle?: string;
+    seoDescription?: string;
+    featured?: boolean;
+    order?: number;
+    featuredProperties?: string[];
   };
   await prisma.area.create({
-    data: parsed,
+    data: {
+      name: parsed.name,
+      slug: parsed.slug,
+      description: parsed.description || "",
+      content: parsed.content || "",
+      image: parsed.image || "",
+      seoTitle: parsed.seoTitle || "",
+      seoDescription: parsed.seoDescription || "",
+      featured: parsed.featured || false,
+      order: parsed.order || 0,
+      featuredProperties: parsed.featuredProperties || [],
+    },
   });
   revalidatePath("/areas");
   revalidatePath("/");
@@ -305,18 +316,29 @@ export async function updateArea(id: string, data: unknown) {
   const parsed = data as {
     name: string;
     slug: string;
-    description: string;
-    content: string;
-    image: string;
-    seoTitle: string;
-    seoDescription: string;
-    featured: boolean;
-    order: number;
-    featuredProperties: string[];
+    description?: string;
+    content?: string;
+    image?: string;
+    seoTitle?: string;
+    seoDescription?: string;
+    featured?: boolean;
+    order?: number;
+    featuredProperties?: string[];
   };
   await prisma.area.update({
     where: { id },
-    data: parsed,
+    data: {
+      name: parsed.name,
+      slug: parsed.slug,
+      description: parsed.description || "",
+      content: parsed.content || "",
+      image: parsed.image || "",
+      seoTitle: parsed.seoTitle || "",
+      seoDescription: parsed.seoDescription || "",
+      featured: parsed.featured || false,
+      order: parsed.order || 0,
+      featuredProperties: parsed.featuredProperties || [],
+    },
   });
   revalidatePath("/areas");
   revalidatePath(`/areas/${parsed.slug}`);
