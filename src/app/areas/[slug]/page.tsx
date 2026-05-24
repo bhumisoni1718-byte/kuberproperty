@@ -89,10 +89,10 @@ export default async function AreaPage({ params }: Props) {
           <h1 className="mt-2 font-display text-3xl font-bold text-navy md:text-4xl">Properties in {area.name}</h1>
           <p className="mt-4 text-navy/60">{area.city}, {area.state}</p>
 
-          {area.description && (
+          {area.content && (
             <div
               className="prose-blog mt-10"
-              dangerouslySetInnerHTML={{ __html: area.description }}
+              dangerouslySetInnerHTML={{ __html: area.content }}
             />
           )}
 

@@ -256,6 +256,7 @@ model Area {
   city        String     @default("Vadodara")
   state       String     @default("Gujarat")
   description String?
+  content     String?
   image       String?
   seoTitle    String?
   seoDescription String?
