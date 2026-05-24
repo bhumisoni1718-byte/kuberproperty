@@ -12,8 +12,8 @@ const navLinks = [
   { href: "/properties", label: "Properties" },
   { href: "/areas", label: "Areas" },
   { href: "/blog", label: "Blog" },
-  { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
+  { href: "/about", label: "About" },
 ];
 
 export function Header() {
