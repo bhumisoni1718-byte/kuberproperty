@@ -73,6 +73,21 @@ export async function deleteProperty(id: string) {
   return { success: true };
 }
 
+export async function toggleFeaturedProperty(id: string, featured: boolean) {
+  const session = await requireAuth();
+  if (!canManageProperties(session.user.role)) throw new Error("Forbidden");
+
+  await prisma.property.update({
+    where: { id },
+    data: { featured },
+  });
+
+  revalidatePath("/properties");
+  revalidatePath("/");
+  revalidatePath("/areas");
+  return { success: true };
+}
+
 export async function createBlog(data: unknown) {
   const session = await requireAuth();
   if (!canEdit(session.user.role)) throw new Error("Forbidden");

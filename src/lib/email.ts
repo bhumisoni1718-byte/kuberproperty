@@ -67,6 +67,24 @@ async function sendWithFallback(options: {
 }
 
 /**
+ * Generic email sender for custom HTML content.
+ */
+export async function sendEmail(options: {
+  to: string | string[];
+  subject: string;
+  html: string;
+  replyTo?: string;
+}) {
+  return sendWithFallback({
+    from: getFromAddress(),
+    to: options.to,
+    subject: options.subject,
+    html: options.html,
+    replyTo: options.replyTo,
+  });
+}
+
+/**
  * Sends lead notification to admin + confirmation to the user.
  */
 export async function sendLeadEmails(payload: LeadEmailPayload, subjectPrefix: string) {

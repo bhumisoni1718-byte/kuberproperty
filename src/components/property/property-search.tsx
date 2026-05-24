@@ -2,10 +2,11 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { Search } from "lucide-react";
+import { Search, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PROPERTY_TYPES, BHK_OPTIONS } from "@/lib/constants";
+import { SaveSearchDialog } from "@/components/property/save-search-dialog";
 
 export function PropertySearch({ compact = false }: { compact?: boolean }) {
   const router = useRouter();
@@ -17,6 +18,7 @@ export function PropertySearch({ compact = false }: { compact?: boolean }) {
   const [minPrice, setMinPrice] = useState(params.get("minPrice") || "");
   const [maxPrice, setMaxPrice] = useState(params.get("maxPrice") || "");
   const [q, setQ] = useState(params.get("q") || "");
+  const [showSaveDialog, setShowSaveDialog] = useState(false);
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -29,6 +31,17 @@ export function PropertySearch({ compact = false }: { compact?: boolean }) {
     if (minPrice) search.set("minPrice", minPrice);
     if (maxPrice) search.set("maxPrice", maxPrice);
     router.push(`/properties?${search.toString()}`);
+  }
+
+  function getCurrentFilters() {
+    return {
+      city: city || undefined,
+      type: type || undefined,
+      listingType: listingType || undefined,
+      bedrooms: bedrooms || undefined,
+      minPrice: minPrice || undefined,
+      maxPrice: maxPrice || undefined,
+    };
   }
 
   return (
@@ -96,10 +109,28 @@ export function PropertySearch({ compact = false }: { compact?: boolean }) {
           </>
         )}
       </div>
-      <Button type="submit" variant="gold" className="mt-4 w-full sm:w-auto" size="lg">
-        <Search className="h-4 w-4" />
-        Search Properties
-      </Button>
+      <div className="flex gap-2 mt-4">
+        <Button type="submit" variant="gold" className="flex-1 sm:w-auto" size="lg">
+          <Search className="h-4 w-4" />
+          Search Properties
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => setShowSaveDialog(true)}
+          size="lg"
+          className="flex-1 sm:w-auto"
+        >
+          <Bell className="h-4 w-4" />
+          Save Search
+        </Button>
+      </div>
+      {showSaveDialog && (
+        <SaveSearchDialog
+          filters={getCurrentFilters()}
+          onClose={() => setShowSaveDialog(false)}
+        />
+      )}
     </form>
   );
 }
