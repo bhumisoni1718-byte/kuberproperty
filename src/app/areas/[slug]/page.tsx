@@ -33,9 +33,9 @@ export default async function AreaPage({ params }: Props) {
   const properties = await getProperties({ areaSlug: slug, limit: 12 });
 
   // Get manually selected featured properties for this area
-  const featuredProperties = area.featuredProperties && area.featuredProperties.length > 0
+  const featuredProperties = (area as any).featuredProperties && (area as any).featuredProperties.length > 0
     ? await prisma.property.findMany({
-        where: { id: { in: area.featuredProperties } },
+        where: { id: { in: (area as any).featuredProperties } },
         take: 2,
       })
     : [];
@@ -95,10 +95,10 @@ export default async function AreaPage({ params }: Props) {
           <h1 className="mt-2 font-display text-3xl font-bold text-navy md:text-4xl">Properties in {area.name}</h1>
           <p className="mt-4 text-navy/60">{area.city}, {area.state}</p>
 
-          {area.content && (
+          {(area as any).content && (
             <div
               className="prose-blog mt-10"
-              dangerouslySetInnerHTML={{ __html: area.content }}
+              dangerouslySetInnerHTML={{ __html: (area as any).content }}
             />
           )}
 
