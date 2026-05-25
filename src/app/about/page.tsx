@@ -46,6 +46,21 @@ export default async function AboutPage() {
               To be Gujarat&apos;s most trusted luxury property brand — known for integrity,
               market expertise, and white-glove client service.
             </p>
+            <h2 className="font-display text-2xl font-bold text-navy mt-10">Why Choose Us</h2>
+            <div className="mt-4 space-y-4 text-navy/70">
+              <p>
+                At Kuber Property, we believe that real estate is more than just transactions — it's about building relationships and helping people achieve their dreams of owning a home. With over 15 years of experience in the Vadodara real estate market, we have developed deep insights into local property trends, neighborhood developments, and investment opportunities.
+              </p>
+              <p>
+                Our team of dedicated professionals works tirelessly to ensure that every client receives personalized attention and expert guidance throughout their property journey. Whether you're a first-time homebuyer, an experienced investor, or an NRI looking to invest in Gujarat, we have the expertise and resources to help you make informed decisions.
+              </p>
+              <p>
+                We specialize in luxury apartments, villas, penthouses, and commercial properties in Vadodara's most sought-after locations. Our portfolio includes properties from reputed developers and ensures that every listing meets our stringent quality standards. We verify legal documentation, check construction quality, and ensure that every property we offer is a sound investment.
+              </p>
+              <p>
+                Transparency is at the core of our business philosophy. We provide complete information about properties, including pricing, amenities, location advantages, and potential for appreciation. Our clients appreciate our honest approach and commitment to their best interests, which has resulted in a 98% client satisfaction rate.
+              </p>
+            </div>
           </div>
           <div className="relative aspect-video rounded-2xl overflow-hidden">
             <Image
