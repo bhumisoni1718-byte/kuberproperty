@@ -8,6 +8,17 @@ import { Label } from "@/components/ui/label";
 import { createArea, updateArea, deleteArea } from "@/actions/admin";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 
+// Character counter component
+function CharacterCounter({ value, maxLength }: { value: string; maxLength: number }) {
+  const count = value?.length || 0;
+  const isOverLimit = count > maxLength;
+  return (
+    <span className={`text-xs ${isOverLimit ? 'text-red-500' : 'text-navy/50'}`}>
+      {count}/{maxLength}
+    </span>
+  );
+}
+
 export default function AdminAreasPage() {
   const [areas, setAreas] = useState<any[]>([]);
   const [properties, setProperties] = useState<any[]>([]);
@@ -161,23 +172,29 @@ export default function AdminAreasPage() {
               />
             </div>
             <div>
-              <Label htmlFor="seoTitle">SEO Title</Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="seoTitle">SEO Title</Label>
+                <CharacterCounter value={formData.seoTitle} maxLength={60} />
+              </div>
               <Input
                 id="seoTitle"
                 value={formData.seoTitle}
                 onChange={(e) => setFormData({ ...formData, seoTitle: e.target.value })}
-                placeholder="Custom SEO title"
+                placeholder="Optional: Custom title for search engines (max 60 chars)"
               />
             </div>
             <div>
-              <Label htmlFor="seoDescription">SEO Description</Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="seoDescription">SEO Description</Label>
+                <CharacterCounter value={formData.seoDescription} maxLength={160} />
+              </div>
               <textarea
                 id="seoDescription"
                 value={formData.seoDescription}
                 onChange={(e) => setFormData({ ...formData, seoDescription: e.target.value })}
                 rows={3}
                 className="w-full rounded-md border px-3 py-2 text-sm"
-                placeholder="Custom SEO description"
+                placeholder="Optional: Custom description for search engines (max 160 chars)"
               />
             </div>
             <div className="flex items-center">

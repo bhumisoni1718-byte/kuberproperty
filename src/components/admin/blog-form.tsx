@@ -14,9 +14,28 @@ import { Textarea } from "@/components/ui/textarea";
 import { BLOG_CATEGORIES } from "@/lib/constants";
 import type { Blog } from "@prisma/client";
 
+// Helper function to convert hyphenated category to display format
+function formatCategory(category: string): string {
+  return category
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
+// Character counter component
+function CharacterCounter({ value, maxLength }: { value: string; maxLength: number }) {
+  const count = value?.length || 0;
+  const isOverLimit = count > maxLength;
+  return (
+    <span className={`text-xs ${isOverLimit ? 'text-red-500' : 'text-navy/50'}`}>
+      {count}/{maxLength}
+    </span>
+  );
+}
+
 export function BlogForm({ blog }: { blog?: Blog }) {
   const router = useRouter();
-  const { register, handleSubmit, formState: { isSubmitting } } = useForm({
+  const { register, handleSubmit, watch, formState: { isSubmitting } } = useForm({
     resolver: zodResolver(blogSchema),
     defaultValues: blog
       ? {
@@ -33,6 +52,9 @@ export function BlogForm({ blog }: { blog?: Blog }) {
         }
       : { status: "DRAFT", tags: [], category: BLOG_CATEGORIES[0] },
   });
+
+  const seoTitle = watch("seoTitle") || "";
+  const seoDescription = watch("seoDescription") || "";
 
   async function onSubmit(data: z.infer<typeof blogSchema>) {
     const result = blog ? await updateBlog(blog.id, data) : await createBlog(data);
@@ -58,13 +80,13 @@ export function BlogForm({ blog }: { blog?: Blog }) {
         <Label>Category</Label>
         <select {...register("category")} className="mt-1 w-full h-10 rounded-md border px-3 text-sm">
           {BLOG_CATEGORIES.map((c) => (
-            <option key={c} value={c}>{c}</option>
+            <option key={c} value={c}>{formatCategory(c)}</option>
           ))}
         </select>
       </div>
       <div>
         <Label>Excerpt</Label>
-        <Textarea {...register("excerpt")} className="mt-1" />
+        <Textarea {...register("excerpt")} className="mt-1" rows={3} />
       </div>
       <div>
         <Label>Content (HTML)</Label>
@@ -73,6 +95,20 @@ export function BlogForm({ blog }: { blog?: Blog }) {
       <div>
         <Label>Featured Image URL</Label>
         <Input {...register("featuredImage")} className="mt-1" />
+      </div>
+      <div>
+        <div className="flex items-center justify-between">
+          <Label>SEO Title</Label>
+          <CharacterCounter value={seoTitle} maxLength={60} />
+        </div>
+        <Input {...register("seoTitle")} className="mt-1" placeholder="Optional: Custom title for search engines (max 60 chars)" />
+      </div>
+      <div>
+        <div className="flex items-center justify-between">
+          <Label>SEO Description</Label>
+          <CharacterCounter value={seoDescription} maxLength={160} />
+        </div>
+        <Textarea {...register("seoDescription")} className="mt-1" rows={3} placeholder="Optional: Custom description for search engines (max 160 chars)" />
       </div>
       <div>
         <Label>Status</Label>

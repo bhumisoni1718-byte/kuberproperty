@@ -34,12 +34,12 @@ export const PROPERTY_TYPES = [
 export const BHK_OPTIONS = [1, 2, 3, 4, 5] as const;
 
 export const BLOG_CATEGORIES = [
-  "Investment Tips",
-  "Real Estate News",
-  "Home Buying Guides",
-  "Luxury Properties",
-  "Commercial Property",
-  "Market Trends",
+  "investment-tips",
+  "real-estate-news",
+  "home-buying-guides",
+  "luxury-properties",
+  "commercial-property",
+  "market-trends",
 ] as const;
 
 export const LOCAL_SEO_KEYWORDS = [

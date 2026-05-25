@@ -5,6 +5,14 @@ import { safeDb } from "@/lib/safe-db";
 import { buildMetadata } from "@/lib/seo";
 import { BLOG_CATEGORIES } from "@/lib/constants";
 
+// Helper function to convert hyphenated category to display format
+function formatCategory(category: string): string {
+  return category
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
 export const metadata = buildMetadata({
   title: "Real Estate Blog & Insights",
   description:
@@ -45,7 +53,7 @@ export default async function BlogPage({ searchParams }: { searchParams: SearchP
                   params.category === cat ? "bg-gold text-navy" : "bg-white/10 text-white"
                 }`}
               >
-                {cat}
+                {formatCategory(cat)}
               </Link>
             ))}
           </div>
@@ -63,7 +71,7 @@ export default async function BlogPage({ searchParams }: { searchParams: SearchP
                   ) : null}
                 </div>
                 <div className="p-5">
-                  <span className="text-xs font-medium text-gold">{post.category}</span>
+                  <span className="text-xs font-medium text-gold">{formatCategory(post.category)}</span>
                   <h2 className="mt-2 text-lg font-semibold text-navy group-hover:text-gold transition line-clamp-2">
                     {post.title}
                   </h2>

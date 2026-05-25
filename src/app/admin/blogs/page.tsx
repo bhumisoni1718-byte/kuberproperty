@@ -4,6 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Plus } from "lucide-react";
 
+// Helper function to convert hyphenated category to display format
+function formatCategory(category: string): string {
+  return category
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
 export default async function AdminBlogsPage() {
   const blogs = await prisma.blog.findMany({
     orderBy: { updatedAt: "desc" },
@@ -33,7 +41,7 @@ export default async function AdminBlogsPage() {
             {blogs.map((b) => (
               <tr key={b.id} className="border-t">
                 <td className="p-4 font-medium">{b.title}</td>
-                <td className="p-4">{b.category}</td>
+                <td className="p-4">{formatCategory(b.category)}</td>
                 <td className="p-4"><Badge variant="outline">{b.status}</Badge></td>
                 <td className="p-4">{b.author.name}</td>
                 <td className="p-4">

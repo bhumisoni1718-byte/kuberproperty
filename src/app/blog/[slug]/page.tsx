@@ -7,6 +7,14 @@ import { getBlogBySlug, getRelatedBlogs } from "@/lib/data/blogs";
 import { buildMetadata, breadcrumbJsonLd, faqJsonLd } from "@/lib/seo";
 import { absoluteUrl } from "@/lib/utils";
 
+// Helper function to convert hyphenated category to display format
+function formatCategory(category: string): string {
+  return category
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
 export const revalidate = 3600;
 
 type Props = { params: Promise<{ slug: string }> };
@@ -81,9 +89,9 @@ export default async function BlogPostPage({ params }: Props) {
 
         <div className="container mx-auto max-w-3xl px-4 py-12 lg:px-8">
           <nav className="text-sm text-navy/60 mb-6">
-            <Link href="/blog">Blog</Link> / <span>{post.category}</span>
+            <Link href="/blog">Blog</Link> / <span>{formatCategory(post.category)}</span>
           </nav>
-          <span className="text-sm font-medium text-gold">{post.category}</span>
+          <span className="text-sm font-medium text-gold">{formatCategory(post.category)}</span>
           <h1 className="mt-2 font-display text-3xl font-bold text-navy md:text-4xl">{post.title}</h1>
           <div className="mt-4 flex items-center gap-4 text-sm text-navy/60">
             <span>By {post.author.name}</span>

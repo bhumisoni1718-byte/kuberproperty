@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { ADMIN_CREDENTIALS, EDITOR_CREDENTIALS, AGENT_CREDENTIALS } from "@/lib/admin-credentials";
 
 const prisma = new PrismaClient();
 
@@ -9,40 +10,42 @@ const SITE_DESCRIPTION =
 async function main() {
   console.log("Seeding Kuber Property database...");
 
-  const password = await bcrypt.hash("Admin@123", 12);
+  const adminPassword = await bcrypt.hash(ADMIN_CREDENTIALS.password, 12);
+  const editorPassword = await bcrypt.hash(EDITOR_CREDENTIALS.password, 12);
+  const agentPassword = await bcrypt.hash(AGENT_CREDENTIALS.password, 12);
 
   const admin = await prisma.user.upsert({
-    where: { email: "admin@kuberproperty.in" },
-    update: {},
+    where: { email: ADMIN_CREDENTIALS.email },
+    update: { password: adminPassword },
     create: {
-      email: "admin@kuberproperty.in",
-      name: "Admin User",
-      password,
-      role: "ADMIN",
+      email: ADMIN_CREDENTIALS.email,
+      name: ADMIN_CREDENTIALS.name,
+      password: adminPassword,
+      role: ADMIN_CREDENTIALS.role,
     },
   });
 
   const editor = await prisma.user.upsert({
-    where: { email: "editor@kuberproperty.in" },
-    update: {},
+    where: { email: EDITOR_CREDENTIALS.email },
+    update: { password: editorPassword },
     create: {
-      email: "editor@kuberproperty.in",
-      name: "Content Editor",
-      password,
-      role: "EDITOR",
+      email: EDITOR_CREDENTIALS.email,
+      name: EDITOR_CREDENTIALS.name,
+      password: editorPassword,
+      role: EDITOR_CREDENTIALS.role,
     },
   });
 
   const agent = await prisma.user.upsert({
-    where: { email: "agent@kuberproperty.in" },
-    update: {},
+    where: { email: AGENT_CREDENTIALS.email },
+    update: { password: agentPassword },
     create: {
-      email: "agent@kuberproperty.in",
-      name: "Raj Patel",
-      password,
-      role: "AGENT",
-      phone: "+91 98765 43210",
-      bio: "Senior property consultant specializing in luxury Vadodara listings.",
+      email: AGENT_CREDENTIALS.email,
+      name: AGENT_CREDENTIALS.name,
+      password: agentPassword,
+      role: AGENT_CREDENTIALS.role,
+      phone: AGENT_CREDENTIALS.phone,
+      bio: AGENT_CREDENTIALS.bio,
     },
   });
 
@@ -284,9 +287,9 @@ async function main() {
   });
 
   console.log("Seed completed!");
-  console.log("Admin: admin@kuberproperty.in / Admin@123");
-  console.log("Editor: editor@kuberproperty.in / Admin@123");
-  console.log("Agent: agent@kuberproperty.in / Admin@123");
+  console.log(`Admin: ${ADMIN_CREDENTIALS.email} / ${ADMIN_CREDENTIALS.password}`);
+  console.log(`Editor: ${EDITOR_CREDENTIALS.email} / ${EDITOR_CREDENTIALS.password}`);
+  console.log(`Agent: ${AGENT_CREDENTIALS.email} / ${AGENT_CREDENTIALS.password}`);
 }
 
 main()

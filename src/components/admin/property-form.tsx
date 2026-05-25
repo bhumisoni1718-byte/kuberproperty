@@ -15,11 +15,22 @@ import { Textarea } from "@/components/ui/textarea";
 import { PROPERTY_TYPES, POSSESSION_OPTIONS } from "@/lib/constants";
 import type { Property } from "@prisma/client";
 
+// Character counter component
+function CharacterCounter({ value, maxLength }: { value: string; maxLength: number }) {
+  const count = value?.length || 0;
+  const isOverLimit = count > maxLength;
+  return (
+    <span className={`text-xs ${isOverLimit ? 'text-red-500' : 'text-navy/50'}`}>
+      {count}/{maxLength}
+    </span>
+  );
+}
+
 export function PropertyForm({ property }: { property?: Property }) {
   const router = useRouter();
   const [images, setImages] = useState<string[]>(property?.images || []);
 
-  const { register, handleSubmit, setValue, formState: { isSubmitting } } = useForm({
+  const { register, handleSubmit, setValue, watch, formState: { isSubmitting } } = useForm({
     resolver: zodResolver(propertySchema),
     defaultValues: property
       ? {
@@ -66,6 +77,9 @@ export function PropertyForm({ property }: { property?: Property }) {
           state: "Gujarat",
         },
   });
+
+  const seoTitle = watch("seoTitle") || "";
+  const seoDescription = watch("seoDescription") || "";
 
   function handleImageUrlChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     const urls = e.target.value
@@ -207,16 +221,22 @@ export function PropertyForm({ property }: { property?: Property }) {
           </div>
         </div>
         <div>
-          <Label>SEO Title</Label>
-          <Input {...register("seoTitle")} className="mt-1" />
+          <div className="flex items-center justify-between">
+            <Label>SEO Title</Label>
+            <CharacterCounter value={seoTitle} maxLength={60} />
+          </div>
+          <Input {...register("seoTitle")} className="mt-1" placeholder="Optional: Custom title for search engines (max 60 chars)" />
         </div>
         <div>
           <Label>Virtual Tour URL</Label>
           <Input {...register("virtualTourUrl")} className="mt-1" />
         </div>
         <div className="sm:col-span-2">
-          <Label>SEO Description</Label>
-          <Textarea rows={2} {...register("seoDescription")} className="mt-1" />
+          <div className="flex items-center justify-between">
+            <Label>SEO Description</Label>
+            <CharacterCounter value={seoDescription} maxLength={160} />
+          </div>
+          <Textarea rows={2} {...register("seoDescription")} className="mt-1" placeholder="Optional: Custom description for search engines (max 160 chars)" />
         </div>
         <label className="flex items-center gap-2">
           <input type="checkbox" {...register("featured")} />
