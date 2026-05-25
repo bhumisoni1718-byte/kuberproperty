@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import Script from "next/script";
 import { prisma } from "@/lib/prisma";
 import { PropertyCard } from "@/components/property/property-card";
 import { buildMetadata, breadcrumbJsonLd, faqJsonLd } from "@/lib/seo";
@@ -69,9 +70,24 @@ export default async function AreaPage({ params }: Props) {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(areaLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd(faqs)) }} />
+      <Script
+        id="area-jsonld"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(areaLd) }}
+      />
+      <Script
+        id="area-breadcrumb-jsonld"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
+      />
+      <Script
+        id="area-faq-jsonld"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd(faqs)) }}
+      />
 
       <article className="bg-white">
         {area.image && (

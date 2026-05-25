@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import Script from "next/script";
 import { format } from "date-fns";
 import { getBlogBySlug, getRelatedBlogs } from "@/lib/data/blogs";
 import { buildMetadata, breadcrumbJsonLd, faqJsonLd } from "@/lib/seo";
@@ -49,11 +50,23 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }} />
+      <Script
+        id="blog-jsonld"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }}
+      />
+      <Script
+        id="blog-breadcrumb-jsonld"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
+      />
       {faqs.length > 0 && (
-        <script
+        <Script
+          id="blog-faq-jsonld"
           type="application/ld+json"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd(faqs)) }}
         />
       )}

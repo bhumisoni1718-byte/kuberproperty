@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import Script from "next/script";
 import { MapPin, Bed, Bath, Maximize } from "lucide-react";
 import { getPropertyBySlug, getSimilarProperties } from "@/lib/data/properties";
 import { PropertyCard } from "@/components/property/property-card";
@@ -58,8 +59,18 @@ export default async function PropertyDetailPage({ params }: Props) {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }} />
+      <Script
+        id="property-jsonld"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <Script
+        id="breadcrumb-jsonld"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
+      />
 
       <article className="bg-white">
         <nav className="container mx-auto px-4 py-4 text-sm text-navy/60 lg:px-8 animate-fade-in">
