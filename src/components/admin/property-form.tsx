@@ -212,11 +212,7 @@ export function PropertyForm({ property }: { property?: Property }) {
         </div>
         <div>
           <Label>Virtual Tour URL</Label>
-          <Input {...register("virtualTourUrl")} className="mt-1" placeholder="https://matterport.com/..." />
-        </div>
-        <div>
-          <Label>YouTube Video URL</Label>
-          <Input {...register("youtubeVideoUrl")} className="mt-1" placeholder="https://youtube.com/watch?v=..." />
+          <Input {...register("virtualTourUrl")} className="mt-1" />
         </div>
         <div className="sm:col-span-2">
           <Label>SEO Description</Label>

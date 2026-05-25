@@ -89,11 +89,34 @@ export default async function AreaPage({ params }: Props) {
           <h1 className="mt-2 font-display text-3xl font-bold text-navy md:text-4xl">Properties in {area.name}</h1>
           <p className="mt-4 text-navy/60">{area.city}, {area.state}</p>
 
-          {area.content && (
+          {area.description ? (
             <div
               className="prose-blog mt-10"
-              dangerouslySetInnerHTML={{ __html: area.content }}
+              dangerouslySetInnerHTML={{ __html: area.description }}
             />
+          ) : (
+            <div className="prose-blog mt-10">
+              <p>
+                {area.name} is one of the most sought-after residential and commercial areas in {area.city}, {area.state}.
+                This area offers a perfect blend of modern infrastructure, excellent connectivity, and peaceful living environment.
+                With well-planned roads, reliable public transportation, and proximity to essential amenities, {area.name} has become a preferred choice for homebuyers and investors alike.
+              </p>
+              <p>
+                The area boasts a wide range of properties including apartments, villas, penthouses, and commercial spaces.
+                Whether you're looking for a cozy 2 BHK apartment or a luxurious 4 BHK villa, {area.name} has options to suit every budget and preference.
+                The real estate market in this area has shown consistent growth over the years, making it an attractive destination for property investment.
+              </p>
+              <p>
+                Residents of {area.name} enjoy easy access to reputed schools, hospitals, shopping malls, restaurants, and entertainment centers.
+                The area is well-connected to other parts of {area.city} through major roads and public transport networks.
+                With ongoing infrastructure development and planned civic amenities, {area.name} is poised for further growth in the coming years.
+              </p>
+              <p>
+                Investing in property in {area.name} offers excellent potential for appreciation and rental income.
+                The area's strategic location, combined with its growing popularity, makes it a smart choice for both end-users and investors.
+                Contact Kuber Property today to explore the best property options in {area.name} and make your dream of owning a home a reality.
+              </p>
+            </div>
           )}
 
           {featured.length > 0 && (

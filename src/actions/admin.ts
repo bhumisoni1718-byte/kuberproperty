@@ -284,10 +284,6 @@ export async function createArea(data: unknown) {
     name: string;
     slug: string;
     description?: string;
-    content?: string;
-    image?: string;
-    seoTitle?: string;
-    seoDescription?: string;
     featured?: boolean;
   };
   await prisma.area.create({
@@ -295,10 +291,6 @@ export async function createArea(data: unknown) {
       name: parsed.name,
       slug: parsed.slug,
       description: parsed.description || "",
-      content: parsed.content || "",
-      image: parsed.image || "",
-      seoTitle: parsed.seoTitle || "",
-      seoDescription: parsed.seoDescription || "",
       featured: parsed.featured || false,
     },
   });
@@ -313,10 +305,6 @@ export async function updateArea(id: string, data: unknown) {
     name: string;
     slug: string;
     description?: string;
-    content?: string;
-    image?: string;
-    seoTitle?: string;
-    seoDescription?: string;
     featured?: boolean;
   };
   await prisma.area.update({
@@ -325,10 +313,6 @@ export async function updateArea(id: string, data: unknown) {
       name: parsed.name,
       slug: parsed.slug,
       description: parsed.description || "",
-      content: parsed.content || "",
-      image: parsed.image || "",
-      seoTitle: parsed.seoTitle || "",
-      seoDescription: parsed.seoDescription || "",
       featured: parsed.featured || false,
     },
   });

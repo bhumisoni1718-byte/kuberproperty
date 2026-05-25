@@ -110,8 +110,24 @@ export default async function PropertyDetailPage({ params }: Props) {
               </div>
 
               <div className="prose max-w-none text-navy/80">
-                <h2 className="text-xl font-semibold text-navy">Description</h2>
+                <h2 className="text-xl font-semibold text-navy">Property Description</h2>
                 <p className="mt-2 whitespace-pre-line leading-relaxed">{property.description}</p>
+                <div className="mt-6 space-y-4">
+                  <h3 className="text-lg font-semibold text-navy">Why Choose This Property?</h3>
+                  <p>
+                    This {property.propertyType.toLowerCase()} in {property.city} offers an excellent opportunity for those seeking quality living in a prime location. 
+                    With {property.bedrooms || 'multiple'} bedrooms and {property.bathrooms || 'modern'} bathrooms, this property is designed to meet the needs of modern families and professionals.
+                    The property spans {property.areaSqFt ? formatArea(property.areaSqFt) : 'a generous area'}, providing ample space for comfortable living.
+                  </p>
+                  <p>
+                    Located in the heart of {property.city}, this property enjoys excellent connectivity to major landmarks, educational institutions, healthcare facilities, and commercial hubs.
+                    The neighborhood is well-developed with all essential amenities within easy reach, making it an ideal choice for families and working professionals alike.
+                  </p>
+                  <p>
+                    This property is offered for {property.listingType === 'RENT' ? 'rent' : 'sale'} at a competitive price of {formatPrice(property.price)}.
+                    Contact us today to schedule a site visit and experience this exceptional property firsthand.
+                  </p>
+                </div>
               </div>
 
               {property.amenities.length > 0 && (
@@ -181,7 +197,7 @@ export default async function PropertyDetailPage({ params }: Props) {
                 />
                 <div className="mt-4 grid grid-cols-2 gap-2">
                   <Button variant="gold" asChild className="w-full">
-                    <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                    <a href={whatsappUrl} target="_blank" rel="noopener noreferrer nofollow">WhatsApp</a>
                   </Button>
                   <Button variant="outline" asChild>
                     <a href={`tel:${CONTACT.phone}`}>Call Now</a>

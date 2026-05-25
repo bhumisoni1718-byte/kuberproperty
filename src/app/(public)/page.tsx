@@ -171,6 +171,11 @@ async function HomeContent() {
                 Featured Properties
               </h2>
               <p className="mt-2 text-navy/60">Handpicked luxury listings in Vadodara</p>
+              <p className="mt-4 max-w-2xl text-navy/70">
+                Explore our curated selection of premium properties in Vadodara's most desirable locations.
+                From spacious 3 BHK apartments to luxurious villas and commercial spaces, we offer properties that match every lifestyle and budget.
+                Each featured property is verified for legal compliance and quality construction, ensuring a safe investment for you and your family.
+              </p>
             </div>
             <Link href="/properties" className="hidden items-center gap-1 text-gold font-medium sm:flex hover:underline">
               View All <ArrowRight className="h-4 w-4" />

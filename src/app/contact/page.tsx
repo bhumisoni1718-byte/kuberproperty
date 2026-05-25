@@ -49,7 +49,7 @@ export default function ContactPage() {
               <a
                 href={whatsappUrl}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener noreferrer nofollow"
                 className="mt-4 inline-block rounded-md bg-[#25D366] px-4 py-2 text-sm font-medium text-white"
               >
                 Chat on WhatsApp

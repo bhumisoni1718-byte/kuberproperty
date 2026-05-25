@@ -27,7 +27,7 @@ export function PropertyCard({ property }: { property: PropertyCardData }) {
     "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80";
 
   return (
-    <article className="group overflow-hidden rounded-xl border border-navy/10 bg-white shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-fade-in-up">
+    <article className="group overflow-hidden rounded-xl border border-navy/10 bg-white shadow-sm transition hover:shadow-xl">
       <Link href={`/properties/${property.slug}`} className="block">
         <div className="relative aspect-[4/3] overflow-hidden">
           <Image
@@ -55,7 +55,7 @@ export function PropertyCard({ property }: { property: PropertyCardData }) {
           <p className="text-xs font-medium uppercase tracking-wider text-gold">
             {property.propertyType}
           </p>
-          <h3 className="mt-1 text-lg font-semibold text-navy line-clamp-2 group-hover:text-gold transition-colors duration-200">
+          <h3 className="mt-1 text-lg font-semibold text-navy line-clamp-2 group-hover:text-gold transition">
             {property.title}
           </h3>
           <p className="mt-2 flex items-center gap-1 text-sm text-navy/60">
