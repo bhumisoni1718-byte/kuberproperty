@@ -20,7 +20,9 @@ export function buildMetadata({
   keywords = [],
 }: SEOProps): Metadata {
   const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} | ${SITE_DESCRIPTION.slice(0, 60)}`;
-  const url = absoluteUrl(path);
+  // Ensure path doesn't have trailing slash for consistency
+  const normalizedPath = path.endsWith('/') && path !== '/' ? path.slice(0, -1) : path;
+  const url = absoluteUrl(normalizedPath);
   const ogImage = image || absoluteUrl("/og-default.jpg");
 
   return {

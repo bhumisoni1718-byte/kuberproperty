@@ -64,20 +64,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  const landingRoutes = [
-    ...PROPERTY_TYPES.map((t) => ({
-      url: absoluteUrl(`/properties?type=${encodeURIComponent(t)}`),
-      lastModified: new Date(),
-      changeFrequency: "weekly" as const,
-      priority: 0.75,
-    })),
-    ...BLOG_CATEGORIES.map((c) => ({
-      url: absoluteUrl(`/blog?category=${encodeURIComponent(c)}`),
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
-    })),
-  ];
-
-  return [...staticRoutes, ...propertyRoutes, ...blogRoutes, ...areaRoutes, ...landingRoutes];
+  // Remove query parameter URLs to avoid duplicate content issues
+  // These are filter pages that can be accessed via the main pages
+  return [...staticRoutes, ...propertyRoutes, ...blogRoutes, ...areaRoutes];
 }
