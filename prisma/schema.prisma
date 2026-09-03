@@ -1,0 +1,295 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  AGENT
+}
+
+enum PropertyStatus {
+  DRAFT
+  PUBLISHED
+  SCHEDULED
+  ARCHIVED
+}
+
+enum ListingType {
+  SALE
+  RENT
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  NEGOTIATION
+  CLOSED
+  LOST
+}
+
+enum PublishStatus {
+  DRAFT
+  PUBLISHED
+  SCHEDULED
+}
+
+model User {
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String     @unique
+  emailVerified DateTime?
+  password      String?
+  image         String?
+  role          Role       @default(AGENT)
+  phone         String?
+  bio           String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  accounts      Account[]
+  sessions      Session[]
+  properties    Property[] @relation("PropertyAuthor")
+  blogs         Blog[]     @relation("BlogAuthor")
+  leads         Lead[]     @relation("LeadAssignee")
+
+  @@index([role])
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Property {
+  id              String         @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  slug            String         @unique
+  description     String
+  price           Float
+  propertyType    String
+  listingType     ListingType    @default(SALE)
+  bedrooms        Int?
+  bathrooms       Int?
+  areaSqFt        Float?
+  amenities       String[]
+  address         String
+  city            String
+  state           String
+  pincode         String?
+  latitude        Float?
+  longitude       Float?
+  images          String[]
+  featuredImage   String?
+  videos          String[]
+  virtualTourUrl  String?
+  youtubeVideoUrl String?
+  floorPlans      String[]
+  nearbyPlaces    Json?
+  possession      String?
+  builder         String?
+  areaId          String?        @db.ObjectId
+  area            Area?          @relation(fields: [areaId], references: [id])
+  seoTitle        String?
+  seoDescription  String?
+  featured        Boolean        @default(false)
+  trending        Boolean        @default(false)
+  status          PropertyStatus @default(DRAFT)
+  publishedAt     DateTime?
+  scheduledAt     DateTime?
+  createdById     String         @db.ObjectId
+  createdBy       User           @relation("PropertyAuthor", fields: [createdById], references: [id])
+  categoryId      String?        @db.ObjectId
+  category        Category?      @relation(fields: [categoryId], references: [id])
+  leads           Lead[]
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@index([city])
+  @@index([propertyType])
+  @@index([listingType])
+  @@index([status])
+  @@index([featured])
+  @@index([price])
+  @@index([bedrooms])
+  @@index([publishedAt])
+}
+
+model Blog {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  slug           String        @unique
+  content        String
+  excerpt        String?
+  featuredImage  String?
+  seoTitle       String?
+  seoDescription String?
+  category       String
+  tags           String[]
+  faqSection     Json?
+  authorName     String?
+  authorId       String        @db.ObjectId
+  author         User          @relation("BlogAuthor", fields: [authorId], references: [id])
+  status         PublishStatus @default(DRAFT)
+  publishedAt    DateTime?
+  scheduledAt    DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([category])
+  @@index([status])
+  @@index([publishedAt])
+  @@index([scheduledAt])
+}
+
+model Category {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  slug        String     @unique
+  description String?
+  type        String
+  properties  Property[]
+  areas       Area[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Lead {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  email        String
+  phone        String?
+  message      String?
+  source       String
+  status       LeadStatus @default(NEW)
+  tags         String[]
+  notes        String?
+  followUpAt   DateTime?
+  propertyId   String?    @db.ObjectId
+  property     Property?  @relation(fields: [propertyId], references: [id])
+  assignedToId String?    @db.ObjectId
+  assignedTo   User?      @relation("LeadAssignee", fields: [assignedToId], references: [id])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([status])
+  @@index([source])
+  @@index([createdAt])
+}
+
+model Testimonial {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  role      String?
+  content   String
+  rating    Int      @default(5)
+  image     String?
+  featured  Boolean  @default(false)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FAQ {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  question  String
+  answer    String
+  category  String?
+  order     Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([category])
+}
+
+model TeamMember {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  role      String
+  bio       String?
+  image     String?
+  email     String?
+  phone     String?
+  linkedin  String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Area {
+  id                   String     @id @default(auto()) @map("_id") @db.ObjectId
+  name                 String
+  slug                 String     @unique
+  city                 String     @default("Vadodara")
+  state                String     @default("Gujarat")
+  description          String?
+  content              String?
+  image                String?
+  seoTitle             String?
+  seoDescription       String?
+  featured             Boolean    @default(false)
+  boundaryCoordinates  Json?
+  categoryId           String?    @db.ObjectId
+  category             Category?  @relation(fields: [categoryId], references: [id])
+  properties           Property[]
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+
+  @@index([city])
+}
+
+model Amenity {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String   @unique
+  icon      String?
+  createdAt DateTime @default(now())
+}
+
+model SiteSettings {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  key       String   @unique
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
+model Newsletter {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
